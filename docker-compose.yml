@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  scaffolding-postgres:
+    image: postgres:latest
+    container_name: scaffolding-postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5902:5432
+    networks:
+      - scaffolding-network
+
+  scaffolding-redis:
+    image: redis:latest
+    container_name: scaffolding-redis
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: redis
+    ports:
+      - 5903:6379
+    networks:
+      - scaffolding-network
+
+  scaffolding-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: scaffolding-network
+    container_name: scaffolding-api
+    working_dir: /var/www/
+    ports:
+      - 5905:9000
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - scaffolding-postgres
+      - scaffolding-redis
+    networks:
+      - scaffolding-network
+
+  scaffolding-nginx:
+    image: nginx:alpine
+    container_name: scaffolding-nginx
+    ports:
+      - 5901:443
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    depends_on:
+      - scaffolding-api
+    networks:
+      - scaffolding-network
+
+networks:
+  scaffolding-network:
+    driver: bridge
