@@ -21,7 +21,9 @@ abstract class BaseService
      */
     public function __construct(ShopModel $shop = null)
     {
-        $this->shop = $shop ?: auth()->user();
+        if ($shop) {
+        }
+        $this->shop = $shop ? $shop : auth()->user();
     }
 
     /**
@@ -31,6 +33,6 @@ abstract class BaseService
      */
     public function getShop()
     {
-        return $this->shop ?: auth()->user();
+        return $this->shop ? $this->shop : auth()->user();
     }
 }
