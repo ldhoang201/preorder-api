@@ -17,14 +17,14 @@ use App\Models\Product;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function getAllProducts()
     {
         $user = User::find(1);
         $productService = new ProductService($user);
         $response = $productService->getAllProducts();
         return $response;
     }
-    public function show($productId)
+    public function getProductById($productId)
     {
         $user = User::find(1);
         $productService = new ProductService($user);
@@ -38,6 +38,6 @@ class ProductController extends Controller
         $user = User::find(1);
         $shopService = new ShopService($user);
         $shop_id = $shopService->getShopProfile();
-        
+
     }
 }
