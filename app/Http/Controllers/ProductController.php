@@ -34,10 +34,12 @@ class ProductController extends Controller
 
     public function saveProducts()
     {
-        $product = $this->index();
+        // $product = $this->getAllProducts();
         $user = User::find(1);
-        $shopService = new ShopService($user);
-        $shop_id = $shopService->getShopProfile();
+        $productService = new productService($user);
+        $productService->saveAllProducts();
+        // echo 'ok';
+        // $shop_id = $shopService->getShopProfile();
 
     }
 }

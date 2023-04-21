@@ -3,10 +3,17 @@
 namespace App\Services\Shopify\REST;
 
 use App\Services\Shopify\BaseService;
-
+use App\Models\Product;
+use App\Services\Shopify\REST\ShopService;
+use App\Models\User;
 
 class ProductService extends BaseService
 {
+  public function show()
+  {
+    $response = $this->getshop()->api()->rest('GET', '/admin/products.json');
+    return $response["body"]["products"];
+  }
   /**
    * Get products data from shopify
    *
@@ -48,12 +55,12 @@ class ProductService extends BaseService
             }
           }';
 
-    $response = $this->getShop()->api()->graph($query);
-    return $response['body']['data']['products'];
+    // $response = $this->getShop()->api()->graph($query);
+    // return $response['body']['data']['products'];
 
 
-    // $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
-    // return data_get($response, 'body.products');
+    $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
+    return data_get($response, 'body.products');
   }
 
   /**
@@ -72,7 +79,7 @@ class ProductService extends BaseService
    * @param  int  $productId
    * @return array|null
    */
-  public function getProductById(int $productId)
+  public function getProductById( $productId)
   {
 
     $query = "{
@@ -108,5 +115,19 @@ class ProductService extends BaseService
     return $response['body']['data']['product'];
     // $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
     // return data_get($response, 'body.product');
+  }
+
+  public function saveAllProducts()
+  {
+    $products = $this->show();
+
+    // foreach ($products as $product) {
+    //   Product::updateOrCreate([
+    //     'product_id' => $product['id'],
+    //     'user_id' => $shopId['id'],
+    //     'image_src' => $product['image']['src'],
+    //     'title' => $product['title']
+    //   ]);
+    // }
   }
 }

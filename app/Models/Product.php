@@ -15,7 +15,6 @@ class Product extends Model
         'status',
         'image_src',
         'inventory',
-        'type',
         'id'
     ];
 }

@@ -22,8 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
 Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
-
+Route::get('/saveAll', [ProductController::class, 'saveAll']);
 Route::prefix('/products')->group(function () {
     Route::get('/', [ProductController::class, 'getAllProducts']);
     Route::get('/{productId}', [ProductController::class, 'getProductById']);
+
 });
