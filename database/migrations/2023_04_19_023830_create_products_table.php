@@ -18,8 +18,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->string('title');
             $table->string('image_src');
-            $table->integer('inventory');
-            $table->integer('type');
+            $table->integer('inventory')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

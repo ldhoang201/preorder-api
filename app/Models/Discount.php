@@ -13,6 +13,6 @@ class Discount extends Model
         'type',
         'dis_percent',
         'expired_date',
-        'shop_id'
+        'user_id'
     ];
 }

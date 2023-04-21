@@ -66,6 +66,12 @@ class ProductService extends BaseService
     return $this->getProductsData();
   }
 
+  public function getAllProductsFromShopify()
+  {
+    $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
+    return data_get($response, 'body.products');
+  }
+
   /**
    * Get a specific product by ID
    *
@@ -108,5 +114,10 @@ class ProductService extends BaseService
     return $response['body']['data']['product'];
     // $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
     // return data_get($response, 'body.product');
+  }
+
+  public function saveAll()
+  {
+    $products = $this->getAllProductsFromShopify();
   }
 }

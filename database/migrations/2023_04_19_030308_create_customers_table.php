@@ -16,11 +16,6 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('customer_id')->unique();
             $table->unsignedBigInteger('user_id');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('address');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });
@@ -34,4 +29,3 @@ return new class extends Migration
         Schema::dropIfExists('customers');
     }
 };
-

@@ -21,6 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/saveAll', [ProductController::class, 'saveAll']);
+
+Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
+
 Route::get('/products/{productId}', [ProductController::class, 'show']);
 Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
 Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
