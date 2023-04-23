@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('image_src');
             $table->integer('inventory')->default(0);
+            $table->integer('discount_per')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

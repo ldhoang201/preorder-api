@@ -115,9 +115,4 @@ class ProductService extends BaseService
     // $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
     // return data_get($response, 'body.product');
   }
-
-  public function saveAll()
-  {
-    $products = $this->getAllProductsFromShopify();
-  }
 }
