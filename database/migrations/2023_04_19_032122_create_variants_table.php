@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('size');
             $table->string('color');
+            $table->integer('inventory')->default(0);
             $table->timestamps();
             $table->foreign('product_id')->references('product_id')->on('products');
         });
