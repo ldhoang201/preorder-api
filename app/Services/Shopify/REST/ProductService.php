@@ -73,6 +73,12 @@ class ProductService extends BaseService
     return $this->getProductsData();
   }
 
+  public function getAllProductsFromShopify()
+  {
+    $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
+    return data_get($response, 'body.products');
+  }
+
   /**
    * Get a specific product by ID
    *
@@ -117,17 +123,8 @@ class ProductService extends BaseService
     // return data_get($response, 'body.product');
   }
 
-  public function saveAllProducts()
+  public function saveAll()
   {
-    $products = $this->show();
-
-    // foreach ($products as $product) {
-    //   Product::updateOrCreate([
-    //     'product_id' => $product['id'],
-    //     'user_id' => $shopId['id'],
-    //     'image_src' => $product['image']['src'],
-    //     'title' => $product['title']
-    //   ]);
-    // }
+    $products = $this->getAllProductsFromShopify();
   }
 }

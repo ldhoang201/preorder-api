@@ -24,7 +24,8 @@ class ProductController extends Controller
         $response = $productService->getAllProducts();
         return $response;
     }
-    public function getProductById($productId)
+
+    public function show($productId)
     {
         $user = User::find(1);
         $productService = new ProductService($user);
@@ -32,14 +33,31 @@ class ProductController extends Controller
         return $response;
     }
 
-    public function saveProducts()
+    public function getProductsFromShopify()
     {
-        // $product = $this->getAllProducts();
         $user = User::find(1);
-        $productService = new productService($user);
-        $productService->saveAllProducts();
-        // echo 'ok';
-        // $shop_id = $shopService->getShopProfile();
+        $productService = new ProductService($user);
+        $response = $productService->getAllProductsFromShopify();
+        return $response;
+    }
 
+    public function saveAll()
+    {
+        $products = $this->getProductsFromShopify();
+        $user = User::find(1);
+        $userId = $user['id'];
+        foreach ($products as $product) {
+            Product::updateOrCreate([
+                'product_id' => $product['id'],
+                'user_id' => $userId,
+                'image_src' => isset($product['image']['src']) ? $product['image']['src'] : 'no_image',
+                'title' => $product['title']
+            ]);
+        }
+        // return 'Saved all';
+    }
+
+    public function getActiveProducts()
+    {
     }
 }

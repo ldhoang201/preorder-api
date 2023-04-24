@@ -7,44 +7,36 @@ use App\Services\Shopify\BaseService;
 
 class CustomerService extends BaseService
 {
-    function getCustomerInforFromShopify()
-    {
-        $query = "{
+  function getCustomerInforFromShopify()
+  {
+    $query = "{
             customers(first:10){
                 edges {
                     node {
                       id
-                      email
-                      firstName
-                      lastName
                     }
                   }
             }
         }";
 
-        $response = $this->getShop()->api()->graph($query);
-        //$data = json_decode(['customer'], true);
-        return $response['body'];
-    }
+    $customers = $this->getShop()->api()->graph($query);
+    //$data = json_decode(['customer'], true);
+    return $customers['body']['data']['customers'];
+  }
 
-    function getCustomerById($customerId)
-    {
-        $query = "{
+  function getCustomerById($customerId)
+  {
+    $query = "{
             customer(id: \"gid://shopify/Customer/{$customerId}\") {
-                email
-                firstName
-                lastName
-                defaultAddress {
-                  address1
-                  city
-                  province
-                  zip
-                  country
-                }
+                id
               }
         }";
-        $response = $this->getShop()->api()->graph($query);
-        //$data = json_decode(['customer'], true);
-        return $response['body'];
+    $customer = $this->getShop()->api()->graph($query);
+    if (!$customer) {
+      return [
+        'error' => "Pre-order not found"
+      ];
     }
+    return $customer['body']['data']['customer'];
+  }
 }
