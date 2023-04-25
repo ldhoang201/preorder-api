@@ -13,7 +13,10 @@ class PreorderService extends BaseService
 
     public function getPreordersFromDB()
     {
-        $preorders = Preorder::all();
+        // $preorders = Preorder::all();
+        // return $preorders;
+        //paginate that each page have 10 preorders use offset paginate
+        $preorders = Preorder::paginate(10);
         return $preorders;
     }
 

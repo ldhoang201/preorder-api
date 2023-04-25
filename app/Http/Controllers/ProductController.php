@@ -56,9 +56,14 @@ class ProductController extends Controller
         }
     }
 
-    public function getActiveProducts() //lay ra nhung san pham co the pre-order
+    public function getActiveProducts(Request $request) //lay ra nhung san pham co the pre-order
     {
-        $products = Product::where('status', 1)->get(); //status = 1 la active = 0 la inactive
+        $page = $request->input('page');
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+        $products = Product::where('status', 1)->offset($offset)->limit($perPage)->get();
         return $products;
+        // $products = Product::where('status', 1)->paginate(10); //status = 1 la active = 0 la inactive
+        // return $products;
     }
 }
