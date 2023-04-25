@@ -20,17 +20,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/saveAll', [ProductController::class, 'saveAll']);
-
-Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
-
-Route::get('/products/{productId}', [ProductController::class, 'show']);
 Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
 Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
-Route::get('/saveAll', [ProductController::class, 'saveAll']);
-Route::prefix('/products')->group(function () {
-    Route::get('/', [ProductController::class, 'getAllProducts']);
-    Route::get('/{productId}', [ProductController::class, 'getProductById']);
 
+
+
+Route::prefix('/products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/saveAll', [ProductController::class, 'saveAll']);
+    Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
+    Route::prefix('/{productId}')->group(function () {
+        Route::get('/detail', [ProductController::class, 'getProduct']);
+        Route::get('/activate', [ProductController::class, 'activate']);
+        Route::get('/deactivate', [ProductController::class, 'deactivate']);
+    });
+    // Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
 });
