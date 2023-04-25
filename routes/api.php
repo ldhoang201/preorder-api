@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PreorderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +21,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/saveAll', [ProductController::class, 'saveAll']);
+// Route::get('/products', [ProductController::class, 'index']);
+// Route::get('/products/saveAll', [ProductController::class, 'saveAll']);
 
-Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
-
-Route::get('/products/{productId}', [ProductController::class, 'show']);
+// Route::get('/products/{productId}', [ProductController::class, 'show']);
 Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
 Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
+
+
+Route::prefix('/products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/saveAll', [ProductController::class, 'saveAll']);
+    Route::get('/{productId}/detail', [ProductController::class, 'show']);
+    Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
+    // Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
+});

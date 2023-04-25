@@ -57,6 +57,11 @@ class CustomerService extends BaseService
     ) {
       return $this->createPreOrder($request->customer_id,$request->user_id,$request->variant_id,$request->product_id,$request->quantity);
   }
+  else{
+    return [
+      'error' => "Missing infomation such as CustomerId,UserId to create Preorder"
+    ];
+  }
 }
   
   

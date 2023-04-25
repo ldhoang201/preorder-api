@@ -54,10 +54,11 @@ class ProductController extends Controller
                 'title' => $product['title']
             ]);
         }
-        // return 'Saved all';
     }
 
-    public function getActiveProducts()
+    public function getActiveProducts() //lay ra nhung san pham co the pre-order
     {
+        $products = Product::where('status', 1)->get(); //status = 1 la active = 0 la inactive
+        return $products;
     }
 }

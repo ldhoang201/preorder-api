@@ -48,12 +48,12 @@ class ProductService extends BaseService
             }
           }';
 
-    // $response = $this->getShop()->api()->graph($query);
-    // return $response['body']['data']['products'];
+    $response = $this->getShop()->api()->graph($query);
+    return $response['body']['data']['products'];
 
 
-    $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
-    return data_get($response, 'body.products');
+    // $response = $this->getShop()->api()->rest('GET', '/admin/products.json');
+    // return data_get($response, 'body.products');
   }
 
   /**
@@ -110,9 +110,11 @@ class ProductService extends BaseService
             }
         }";
 
-    // $response = $this->getShop()->api()->graph($query);
-    // return $response['body']['data']['product'];
-    $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
-    return data_get($response, 'body.product');
+    $response = $this->getShop()->api()->graph($query);
+    return $response['body']['data']['product'];
+
+
+    // $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
+    // return data_get($response, 'body.product');
   }
 }
