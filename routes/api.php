@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,5 @@ Route::prefix('/products')->group(function () {
     Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
     // Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
 });
+
+Route::post('/webhook/product/update', [WebhookController::class, 'handleProductUpdate']);

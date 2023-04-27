@@ -58,6 +58,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'portal_url' => env('PORTAL_URL', 'https://localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

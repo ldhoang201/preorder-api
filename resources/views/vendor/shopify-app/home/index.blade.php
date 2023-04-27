@@ -9,7 +9,16 @@
 </head>
 
 <body>
-    Hello
+    <div id="app"></div>
+    <script>
+        var scaffoldingEmbeddedData = {
+            apiKey: "{{ config('shopify-app.api_key') }}",
+            host: "{{ $host }}",
+        };
+    </script>
+    <script type="module" src="http://localhost:5900/src/main.ts">
+    </script>
+
 </body>
 
 </html>
