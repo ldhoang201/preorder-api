@@ -62,7 +62,6 @@ class ProductController extends Controller
                     'product_id' => $variant['product_id'],
                     'title_var' => $variant['title'],
                     'price' => $variant['price'],
-                    'inventory' => $variant['inventory_quantity'],
                     'size' => $variant['option1'],
                     'color' => $variant['option2'],
                 ]);
@@ -77,7 +76,7 @@ class ProductController extends Controller
         $product->update(['status' => 1]);
         return $product->product_id . ' is activated';
     }
-    
+
     public function deactivate(Request $request)
     {
         $product = Product::where('product_id', $request->productId)->first();

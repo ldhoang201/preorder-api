@@ -116,7 +116,7 @@ class ProductService extends BaseService
                 }
             }
         }";
-
+      
     $response = $this->getShop()->api()->graph($query);
     return $response['body']['data']['product'];
     // $response = $this->getShop()->api()->rest('GET', "/admin/products/{$productId}.json");
