@@ -27,7 +27,7 @@ Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoByI
 
 
 
-Route::prefix('/products')->group(function () {
+Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/saveAll', [ProductController::class, 'saveAll']);
     Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);

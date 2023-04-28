@@ -8,14 +8,14 @@
  </head>
 
  <body>
-     <div id="app"></div>
+    <div id="app"></div> -->
      <script>
          var scaffoldingEmbeddedData = {
              apiKey: "{{ config('shopify-app.api_key') }}",
              host: "{{ $host }}",
          };
      </script>
-     <script type="module" src="http://localhost:5902/src/main.ts">
+     <script type="module" src="http://localhost:5904/src/main.ts">
      </script>
 
  </body>

@@ -15,10 +15,14 @@ class ProductController extends Controller
 
     public function index()
     {
-        $user = User::find(1);
-        $productService = new ProductService($user);
-        $response = $productService->getAllProducts();
-        return $response;
+        // $user = User::find(1);
+        // $productService = new ProductService($user);
+        // $response = $productService->getAllProducts();
+        // return $response;
+
+
+        $response = auth()->user()->api()->rest('GET', '/admin/products.json');
+        return data_get($response, 'body.products');
     }
 
     public function getProduct($productId)
@@ -31,32 +35,27 @@ class ProductController extends Controller
 
     public function getProductsFromShopify()
     {
-        $user = User::find(1);
-        $productService = new ProductService($user);
-        $response = $productService->getAllProductsFromShopify();
+        $user = auth()->user();
+        $tempArr = $user->api()->rest('GET', '/admin/products.json');
+        $response = data_get($tempArr, 'body.products');
         return $response;
     }
 
     public function saveAll()
     {
         $products = $this->getProductsFromShopify();
-        $user = User::find(1);
-        $userId = $user['id'];
-        // save products' info
         foreach ($products as $product) {
             Product::updateOrCreate([
                 'product_id' => $product['id'],
-                'user_id' => $userId,
+                'user_id' => auth()->user()->id,
                 'image_src' => isset($product['image']['src']) ? $product['image']['src'] : 'no_image',
                 'title' => $product['title']
             ]);
         }
-        // save varients' info
+        // // save varients' info
         foreach ($products as $product) {
             $variants = $product['variants'];
             foreach ($variants as $variant) {
-                // echo $variant['id'];
-                // echo nl2br("\n");
                 Variant::updateOrCreate([
                     'id' => $variant['id'],
                     'product_id' => $variant['product_id'],
