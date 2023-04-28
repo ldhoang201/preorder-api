@@ -14,7 +14,6 @@ class Product extends Model
         'title',
         'status',
         'image_src',
-        'inventory',
         'type',
         'id'
     ];

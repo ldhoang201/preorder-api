@@ -13,6 +13,8 @@ class Variant extends Model
         'product_id',
         'price',
         'size',
-        'color'
+        'title_var',
+        'color',
+        'inventory',
     ];
 }
