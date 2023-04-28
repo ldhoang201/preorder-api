@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app"></div> -->
     <script>
         var scaffoldingEmbeddedData = {
             apiKey: "{{ config('shopify-app.api_key') }}",

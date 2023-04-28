@@ -15,10 +15,14 @@ class ProductController extends Controller
 
     public function index()
     {
-        $user = User::find(1);
-        $productService = new ProductService($user);
-        $response = $productService->getAllProducts();
-        return $response;
+        // $user = User::find(1);
+        // $productService = new ProductService($user);
+        // $response = $productService->getAllProducts();
+        // return $response;
+
+
+        $response = auth()->user()->api()->rest('GET', '/admin/products.json');
+        return data_get($response, 'body.products');
     }
 
     public function getProduct($productId)
