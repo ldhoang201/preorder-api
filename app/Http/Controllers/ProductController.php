@@ -13,6 +13,7 @@ use App\Models\Variant;
 class ProductController extends Controller
 {
 
+    // get products' info from Shopify
     public function getProductsFromShopify()
     {
         $user = auth()->user();
@@ -24,6 +25,7 @@ class ProductController extends Controller
     public function saveAll()
     {
         $products = $this->getProductsFromShopify();
+        // save products' info
         foreach ($products as $product) {
             Product::updateOrCreate([
                 'product_id' => $product['id'],
@@ -32,7 +34,7 @@ class ProductController extends Controller
                 'title' => $product['title']
             ]);
         }
-        // // save varients' info
+        // save varients' info
         foreach ($products as $product) {
             $variants = $product['variants'];
             foreach ($variants as $variant) {
@@ -49,24 +51,25 @@ class ProductController extends Controller
         return 'Data saved successfully';
     }
 
+    // show all products
     public function showProducts() {
         $product = Product::all();
         return $product;
     }
 
+    // show all variants by product id
     public function showVariants(Request $request) {
         $variants = Variant::where('product_id', $request->productId)->get();
         return $variants;
     }
 
-    // public function getProduct(Request $request)
-    // {
-    //     $product = Product::where('product_id', $request->productId)->first();
-    //     return $product;
+    // search products by name
+    public function searchProductsByName(Request $request) {
+        $product = Product::where('title', 'ilike', '%'.$request->productName.'%')->get();
+        return $product;
+    }
 
-    //     // return $response;
-    // }
-
+    // activate a product by its id
     public function activate(Request $request)
     {
         $product = Product::where('product_id', $request->productId)->first();
@@ -74,6 +77,7 @@ class ProductController extends Controller
         return $product->product_id . ' is activated';
     }
 
+    // deactivate a product by its id
     public function deactivate(Request $request)
     {
         $product = Product::where('product_id', $request->productId)->first();
@@ -81,6 +85,7 @@ class ProductController extends Controller
         return $product->product_id . ' is deactivated';
     }
 
+    // get list of active products
     public function getActiveProducts() //lay ra nhung san pham co the pre-order
     {
         $products = Product::where('status', 1)->get(); //status = 1 la active = 0 la inactive
