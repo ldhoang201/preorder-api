@@ -28,15 +28,14 @@ Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoByI
 
 
 Route::prefix('/products')->middleware('verify.shopify')->group(function () {
-    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/', [ProductController::class, 'showProducts']);
     Route::get('/saveAll', [ProductController::class, 'saveAll']);
     Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
     Route::prefix('/{productId}')->group(function () {
-        Route::get('/detail', [ProductController::class, 'getProduct']);
+        Route::get('/detail', [ProductController::class, 'showVariants']);
         Route::get('/activate', [ProductController::class, 'activate']);
         Route::get('/deactivate', [ProductController::class, 'deactivate']);
     });
-    // Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
 });
 
 Route::post('/webhook/product/update', [WebhookController::class, 'handleProductUpdate']);

@@ -13,26 +13,6 @@ use App\Models\Variant;
 class ProductController extends Controller
 {
 
-    public function index()
-    {
-        // $user = User::find(1);
-        // $productService = new ProductService($user);
-        // $response = $productService->getAllProducts();
-        // return $response;
-
-
-        $response = auth()->user()->api()->rest('GET', '/admin/products.json');
-        return data_get($response, 'body.products');
-    }
-
-    public function getProduct($productId)
-    {
-        $user = User::find(1);
-        $productService = new ProductService($user);
-        $response = $productService->getProductById($productId);
-        return $response;
-    }
-
     public function getProductsFromShopify()
     {
         $user = auth()->user();
@@ -68,6 +48,24 @@ class ProductController extends Controller
         };
         return 'Data saved successfully';
     }
+
+    public function showProducts() {
+        $product = Product::all();
+        return $product;
+    }
+
+    public function showVariants(Request $request) {
+        $variants = Variant::where('product_id', $request->productId)->get();
+        return $variants;
+    }
+
+    // public function getProduct(Request $request)
+    // {
+    //     $product = Product::where('product_id', $request->productId)->first();
+    //     return $product;
+
+    //     // return $response;
+    // }
 
     public function activate(Request $request)
     {
