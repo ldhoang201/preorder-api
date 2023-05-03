@@ -86,6 +86,8 @@ return [
     */
     'shop_auth_provider' => env('SHOPIFY_SHOP_AUTH_PROVIDER', 'users'),
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Namespace
@@ -341,16 +343,17 @@ return [
     */
 
     'webhooks' => [
-        /*
-            [
-                'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'ORDERS_CREATE'),
-                'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://some-app.com/webhook/orders-create')
-            ], [
-                'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'APP_PURCHASES_ONE_TIME_UPDATE'),
-                'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),
-            ]
-            ...
-        */],
+
+        [
+            'topic' => 'PRODUCTS_UPDATE',
+            'address' => 'https://9f6a-2405-4802-3f66-1660-efbe-1dd1-1c1b-3fa3.ngrok-free.app/webhook/products-update'
+        ],
+        // [
+        //     'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'APP_PURCHASES_ONE_TIME_UPDATE'),
+        //     'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),
+        // ]
+
+    ],
 
     /*
     |--------------------------------------------------------------------------

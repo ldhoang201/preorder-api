@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
-use App\Http\Controllers\WebhookController;
+// use App\Http\Controllers\WebhookController;
+use Osiset\ShopifyApp\Traits\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,20 +23,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('/products', [ProductController::class, 'index']);
-// Route::get('/products/saveAll', [ProductController::class, 'saveAll']);
+// Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
+// Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
 
-// Route::get('/products/{productId}', [ProductController::class, 'show']);
-Route::get('/customerInfo', [CustomerController::class, 'getCustomerInfo']);
-Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoById']);
 
 
 Route::prefix('/products')->middleware('verify.shopify')->group(function () {
-    Route::get('/', [ProductController::class, 'index']);
-    Route::get('/saveAll', [ProductController::class, 'saveAll'])->middleware('verify.shopify');
-    // Route::get('/{productId}/detail', [ProductController::class, 'show']);
+    Route::get('/', [ProductController::class, 'showProducts']);
+    Route::get('/saveAll', [ProductController::class, 'saveAll']);
+    Route::get('/{productName}/search', [ProductController::class, 'searchProductsByName']);
     Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
-    Route::get('/allproductsfromshopify', [ProductController::class, 'getProductsFromShopify']);
+    Route::prefix('/{productId}')->group(function () {
+        Route::get('/detail', [ProductController::class, 'showVariants']);
+        Route::get('/activate', [ProductController::class, 'activate']);
+        Route::get('/deactivate', [ProductController::class, 'deactivate']);
+    });
 });
 
-Route::post('/webhook/product/update', [WebhookController::class, 'handleProductUpdate']);
+Route::post('/webhook/products-update', [WebhookController::class, 'handle'])->middleware('auth.webhook');
