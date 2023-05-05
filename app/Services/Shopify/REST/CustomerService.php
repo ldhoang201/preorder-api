@@ -2,7 +2,14 @@
 
 namespace App\Services\Shopify\REST;
 
+use App\Http\Controllers\CustomerController;
 use App\Services\Shopify\BaseService;
+use App\Models\Product;
+use App\Models\Variant;
+use App\Models\Preorder;
+use Illuminate\Http\Request;
+use App\Models\Dp;
+use App\Models\Discount;
 
 
 class CustomerService extends BaseService
@@ -39,4 +46,6 @@ class CustomerService extends BaseService
     }
     return $customer['body']['data']['customer'];
   }
+  
+
 }

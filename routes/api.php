@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
-use App\Http\Controllers\WebhookController;
+// use App\Http\Controllers\WebhookController;
+use Osiset\ShopifyApp\Traits\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
