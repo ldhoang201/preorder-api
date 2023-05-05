@@ -32,9 +32,11 @@ class WebhookController extends Controller
         return $tempArr;
     }
 
-    public function removeWebhook(){
+    public function removeWebhook($webhook_id)
+    {
         $user = auth()->user();
-        
+        $tempArr = $user->api()->rest('DELETE', '/admin/webhooks/' . $webhook_id . '.json');
+        return $tempArr;
     }
 
     public function getDataFromWebhook()

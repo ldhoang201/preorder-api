@@ -47,6 +47,7 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
 
 Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
 Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');
+Route::delete('/removewebhook/{webhook_id}', [WebhookController::class, 'removeWebhook'])->middleware('verify.shopify');
 
 Route::get('/testHookRes', function () {
     // $ngrokUrl = 'http://localhost:4040/api/requests/http?limit=1';
