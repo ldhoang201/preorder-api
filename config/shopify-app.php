@@ -344,10 +344,10 @@ return [
 
     'webhooks' => [
 
-        [
-            'topic' => 'PRODUCTS_UPDATE',
-            'address' => 'https://9f6a-2405-4802-3f66-1660-efbe-1dd1-1c1b-3fa3.ngrok-free.app/webhook/products-update'
-        ],
+        // [
+        //     'topic' => 'PRODUCTS_UPDATE',
+        //     'address' => 'https://6e56-2405-4802-3f66-1660-a4c2-2c7f-b3c-fd38.ngrok-free.app/webhook/products-update'
+        // ],
         // [
         //     'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'APP_PURCHASES_ONE_TIME_UPDATE'),
         //     'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),

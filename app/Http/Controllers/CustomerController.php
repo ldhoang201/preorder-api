@@ -21,7 +21,7 @@ class CustomerController extends Controller
     public function getCustomerById(Request $request)
     {
         $customer_id = $request->customerId;
-        $customer = Customer::findOrFail($customerId);
+        $customer = Customer::findOrFail($customer_id);
         return $customer;
     }
 

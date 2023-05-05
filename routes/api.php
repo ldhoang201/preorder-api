@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
-// use App\Http\Controllers\WebhookController;
-use Osiset\ShopifyApp\Traits\WebhookController;
+use App\Http\Controllers\WebhookController;
+use GuzzleHttp\Client;
+// use Osiset\ShopifyApp\Traits\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,26 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     });
 });
 
-Route::post('/webhook/products-update', [WebhookController::class, 'handle'])->middleware('auth.webhook');
+// Route::post('/webhook/products-update', [WebhookController::class, 'handle'])->middleware('auth.webhook');
+
+// Route::get('/listwebhooks', [WebhookController::class, 'handleProductUpdate'])->middleware('verify.shopify');
+
+Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
+Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');
+
+Route::get('/testHookRes', function () {
+    // $ngrokUrl = 'http://localhost:4040/api/requests/http?limit=1';
+    // $client = new Client([
+    //     'headers' => [
+    //         'Authorization' => 'Bearer 2P39Uz4JimSsbz3s0pqlvWGrtgt_642kjoMwRxYkaAMb4Y5oi',
+    //     ],
+    // ]);
+
+    $client = new GuzzleHttp\Client();
+    $res = $client->request('GET', 'http://localhost:4040/api/requests/http?limit=1', [
+        'headers' => [
+            'Authorization' => 'Bearer 2P39Uz4JimSsbz3s0pqlvWGrtgt_642kjoMwRxYkaAMb4Y5oi',
+        ],
+    ]);
+    return $res;
+});
