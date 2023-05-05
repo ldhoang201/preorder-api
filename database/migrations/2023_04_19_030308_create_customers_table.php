@@ -17,6 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id')->unique();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('address');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

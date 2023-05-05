@@ -1,35 +1,46 @@
 <?php
 
- namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
- use Illuminate\Http\Request;
- use Osiset\ShopifyApp\Traits\WebhookController as BaseWebhookController;
- use Osiset\ShopifyApp\Util;
+use Illuminate\Http\Request;
+use Osiset\ShopifyApp\Traits\WebhookController as ShopifyWebhookController;
 
- class WebhookController extends Controller
- {
-     use BaseWebhookController;
+class WebhookController extends Controller
+{
+    use ShopifyWebhookController;
 
-     /**
-      * Handles the product/update webhook.
-      *
-      * @param Request $request The incoming request.
-      *
-      * @return void
-      */
-     public function handleProductUpdate(string $type, Request $request)
-     {
-         // Handle the incoming webhook
-         // Get the job class and dispatch
-         $jobClass = Util::getShopifyConfig('job_namespace') . str_replace('-', '', ucwords($type, '-')) . 'Job';
-         $jobData = json_decode($request->getContent());
+    public function createWebhook()
+    {
+        $user = auth()->user();
+        $tempArr = $user->api()->rest('POST', '/admin/webhooks.json', [
 
-         $jobClass::dispatch(
-             $request->header('x-shopify-shop-domain'),
-             $jobData
-         )->onQueue(Util::getShopifyConfig('job_queues')['webhooks']);
+            'webhook' =>
+            [
+                'topic' => 'products/update',
+                'address' => 'https://08ff-2405-4803-fca8-7020-b863-e445-630c-b657.ngrok-free.app/products-update',
+                'format' => 'json'
+            ]
+        ]);
 
-         // Return a JSON response with a 200 status code
-         return response()->json(['message' => 'Webhook received successfully'], 200);
-     }
- }
+        return $tempArr;
+    }
+
+    public function getListWebhooks()
+    {
+        $user = auth()->user();
+        $tempArr = $user->api()->rest('GET', '/admin/webhooks.json');
+        return $tempArr;
+    }
+
+    public function removeWebhook(Request $request)
+    {
+        $user = auth()->user();
+        $user->api()->rest('DELETE', '/admin/webhooks/' . $request->webhookId . '.json');
+        $tempArr = $user->api()->rest('GET', '/admin/webhooks.json');
+        return $tempArr;
+    }
+
+    public function getDataFromWebhook()
+    {
+    }
+}

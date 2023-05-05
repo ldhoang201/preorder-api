@@ -39,4 +39,6 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     });
 });
 
-Route::post('/webhook/product/update', [WebhookController::class, 'handleProductUpdate']);
+Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
+Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');
+Route::delete('/removeWebhook/{webhookId}', [WebhookController::class, 'removeWebhook'])->middleware('verify.shopify');
