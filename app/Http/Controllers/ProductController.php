@@ -50,8 +50,8 @@ class ProductController extends Controller
                     'product_id' => $variant['product_id'],
                     'title_var' => $variant['title'],
                     'price' => $variant['price'],
-                    'size' => $variant['option1'],
-                    'color' => $variant['option2'],
+                    'option1' => $variant['option1'],
+                    'option2' => $variant['option2'],
                 ]);
             }
         };
