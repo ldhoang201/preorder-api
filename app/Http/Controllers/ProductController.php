@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
-use App\Services\Shopify\REST\ProductService;
-use App\Services\Shopify\REST\ShopService;
 use App\Models\Product;
 use App\Models\Variant;
+use App\Http\Controllers\UserController;
 
 class ProductController extends Controller
 {
 
-    // get products' info from Shopify
     // get products' info from Shopify
     public function getProductsFromShopify()
     {
@@ -23,7 +21,14 @@ class ProductController extends Controller
         return $response;
     }
 
-    public function saveAll()
+    public function getUserId()
+    {
+        $userController = new UserController;
+        $user = $userController->show();
+        return $user->id;
+    }
+
+    public function save()
     {
         $products = $this->getProductsFromShopify();
         // save products' info
@@ -56,8 +61,25 @@ class ProductController extends Controller
     // show all products
     public function showProducts()
     {
-        $product = Product::all();
+        $product = Product::where('user_id', $this->getUserId())->get();
         return $product;
+    }
+
+    // search products by name
+    public function search(Request $request)
+    {
+        $product = Product::where('title', 'ilike', '%' . $request->name . '%')
+            ->where('user_id', $this->getUserId())
+            ->where('status', 1)->take(5)->get();
+        return $product;
+    }
+
+    // deactivate a product by id
+    public function deactivate(Request $request)
+    {
+        $product = Product::where('product_id', $request->productId)->first();
+        $product->update(['status' => 0]);
+        return $product->product_id . ' is deactivated';
     }
 
     // show all variants by product id
@@ -67,27 +89,12 @@ class ProductController extends Controller
         return $variants;
     }
 
-    // search products by name
-    public function searchProductsByName(Request $request)
-    {
-        $product = Product::where('title', 'ilike', '%' . $request->productName . '%')->get();
-        return $product;
-    }
-
     // activate a product by its id
     public function activate(Request $request)
     {
         $product = Product::where('product_id', $request->productId)->first();
         $product->update(['status' => 1]);
         return $product->product_id . ' is activated';
-    }
-
-    // deactivate a product by its id
-    public function deactivate(Request $request)
-    {
-        $product = Product::where('product_id', $request->productId)->first();
-        $product->update(['status' => 0]);
-        return $product->product_id . ' is deactivated';
     }
 
     // get list of active products

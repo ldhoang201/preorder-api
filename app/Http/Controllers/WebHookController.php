@@ -17,11 +17,12 @@ class WebhookController extends Controller
             'webhook' =>
             [
                 'topic' => 'products/update',
-                'address' => 'https://08ff-2405-4803-fca8-7020-b863-e445-630c-b657.ngrok-free.app/products-update',
+                'address' => 'https://f667-2405-4803-fca8-7020-b863-e445-630c-b657.ngrok-free.app/products-update',
                 'format' => 'json'
             ]
         ]);
 
+        $tempArr = $user->api()->rest('GET', '/admin/webhooks.json');
         return $tempArr;
     }
 
