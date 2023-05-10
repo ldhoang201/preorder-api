@@ -31,7 +31,7 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::get('/', [ProductController::class, 'showProducts']);
     Route::put('/deactivate/{id}', [ProductController::class, 'deactivate']);
     Route::get('/search/{name}', [ProductController::class, 'search']);
-    Route::get('/{productId}', [ProductController::class, 'showVariants']);
+    Route::get('/{id}', [ProductController::class, 'showVariants']);
     // Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
     // Route::prefix('/{productId}')->group(function () {
     //     Route::delete('/', [ProductController::class], 'deleteProduct');

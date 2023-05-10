@@ -77,7 +77,7 @@ class ProductController extends Controller
     // deactivate a product by id
     public function deactivate(Request $request)
     {
-        $product = Product::where('product_id', $request->productId)->first();
+        $product = Product::where('product_id', $request->id)->first();
         $product->update(['status' => 0]);
         return $product->product_id . ' is deactivated';
     }
@@ -85,7 +85,7 @@ class ProductController extends Controller
     // show all variants by product id
     public function showVariants(Request $request)
     {
-        $variants = Variant::where('product_id', $request->productId)->get();
+        $variants = Variant::where('product_id', $request->id)->get();
         return $variants;
     }
 
