@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Variant;
@@ -61,33 +60,51 @@ class ProductController extends Controller
     }
 
     // show all products
-    public function showProducts()
+    public function getProducts()
     {
         $product = Product::where('user_id', $this->getUserId())->get();
         return $product;
     }
 
-    // search products by name
-    public function search(Request $request)
+    // search products by product id
+    public function searchById($id)
     {
-        $product = Product::where('title', 'ilike', '%' . $request->name . '%')
+        $product = Product::where('product_id', 'ilike', '%' . $id . '%')
+            ->where('user_id', $this->getUserId())
+            ->where('status', 0)->get();
+        return $product;
+    }
+
+    // search products by name
+    public function searchByName($name)
+    {
+        $product = Product::where('title', 'ilike', '%' . $name . '%')
+            ->where('user_id', $this->getUserId())
+            ->where('status', 0)->get();
+        return $product;
+    }
+
+    // search preorder products by name
+    public function searchPre($name)
+    {
+        $product = Product::where('title', 'ilike', '%' . $name . '%')
             ->where('user_id', $this->getUserId())
             ->where('status', 1)->take(5)->get();
         return $product;
     }
 
     // deactivate a product by id
-    public function deactivate(Request $request)
+    public function deactivate($id)
     {
-        $product = Product::where('product_id', $request->id)->first();
+        $product = Product::where('product_id', $id)->first();
         $product->update(['status' => 0]);
         return $product->product_id . ' is deactivated';
     }
 
     // show all variants by product id
-    public function showVariants(Request $request)
+    public function getVariants($id)
     {
-        $variants = Variant::where('product_id', $request->id)->get();
+        $variants = Variant::where('product_id', $id)->get();
         return $variants;
     }
 
@@ -102,8 +119,6 @@ class ProductController extends Controller
     // get list of active products
     public function getActiveProducts() //lay ra nhung san pham co the pre-order
     {
-        $products = Product::where('status', 1)->get(); //status = 1 la active = 0 la inactive
-        return $products;
         $products = Product::where('status', 1)->get(); //status = 1 la active = 0 la inactive
         return $products;
     }

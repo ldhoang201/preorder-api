@@ -28,12 +28,24 @@ Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoByI
 
 Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::post('/save', [ProductController::class, 'save']);
-    Route::get('/', [ProductController::class, 'showProducts']);
+
+    Route::get('/', [ProductController::class, 'getProducts']);
+    Route::get('/variants/{id}', [ProductController::class, 'getVariants']);
+
+    Route::prefix('/search')->group(function () {
+        Route::get('/id/{id}', [ProductController::class, 'searchById']);
+        Route::get('/name/{name}', [ProductController::class, 'searchByname']);
+        Route::get('/pre/{name}', [ProductController::class, 'searchPre']);
+    });
+
+    Route::prefix('active')->group(function () {
+        Route::get('/', [ProductController::class, 'getActiveProducts']);
+        Route::get('/{id}', [ProductController::class, 'checkActive']);
+    });
+
     Route::put('/deactivate/{id}', [ProductController::class, 'deactivate']);
-    Route::get('/search/{name}', [ProductController::class, 'search']);
-    Route::get('/{id}', [ProductController::class, 'showVariants']);
+
     Route::get('/abc/get', [ProductController::class, 'getProductsFromShopify']);
-    // Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
     // Route::prefix('/{productId}')->group(function () {
     //     Route::delete('/', [ProductController::class], 'deleteProduct');
     //     Route::get('/detail', [ProductController::class, 'showVariants']);
