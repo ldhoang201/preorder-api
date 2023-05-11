@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('variant_id');
-            $table->date('preorder_date');
+            // $table->date('preorder_date');
             $table->unsignedBigInteger('quantity');
             $table->timestamps();
             $table->foreign('customer_id')->references('customer_id')->on('customers');
