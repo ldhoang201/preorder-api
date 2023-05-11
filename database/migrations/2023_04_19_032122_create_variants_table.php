@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('option1')->nullable();
             $table->string('option2')->nullable();
             $table->integer('inventory')->default(0);
+            $table->string('sku')->nullable();
+            $table->integer('sold')->default(0);
+            $table->integer('preorder')->default(0);
             $table->timestamps();
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
         });

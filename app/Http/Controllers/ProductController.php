@@ -38,7 +38,8 @@ class ProductController extends Controller
                 'user_id' => auth()->user()->id,
                 'user_id' => auth()->user()->id,
                 'image_src' => isset($product['image']['src']) ? $product['image']['src'] : 'no_image',
-                'title' => $product['title']
+                'title' => $product['title'],
+                'vendor' => $product['vendor']
             ]);
         }
         // save varients' info
@@ -52,6 +53,7 @@ class ProductController extends Controller
                     'price' => $variant['price'],
                     'option1' => $variant['option1'],
                     'option2' => $variant['option2'],
+                    'sku' => $variant['sku']
                 ]);
             }
         };

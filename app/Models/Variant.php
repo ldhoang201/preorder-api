@@ -15,6 +15,9 @@ class Variant extends Model
         'option1',
         'option2',
         'title_var',
-        'inventory'
+        'inventory',
+        'sku',
+        'sold',
+        'preorder'
     ];
 }

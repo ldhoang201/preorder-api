@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image_src');
             $table->date('date_start')->nullable();
             $table->date('date_end')->nullable();
+            $table->string('vendor')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

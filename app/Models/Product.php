@@ -14,6 +14,9 @@ class Product extends Model
         'title',
         'status',
         'image_src',
-        'id'
+        'id',
+        'date_start',
+        'date_end',
+        'vendor'
     ];
 }

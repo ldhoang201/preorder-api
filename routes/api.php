@@ -32,6 +32,7 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::put('/deactivate/{id}', [ProductController::class, 'deactivate']);
     Route::get('/search/{name}', [ProductController::class, 'search']);
     Route::get('/{id}', [ProductController::class, 'showVariants']);
+    Route::get('/abc/get', [ProductController::class, 'getProductsFromShopify']);
     // Route::get('/getActiveProducts', [ProductController::class, 'getActiveProducts']);
     // Route::prefix('/{productId}')->group(function () {
     //     Route::delete('/', [ProductController::class], 'deleteProduct');
@@ -40,6 +41,8 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     //     Route::get('/deactivate', [ProductController::class, 'deactivate']);
     // });
 });
+
+
 
 // Route::delete('products/{productId}/del', [ProductController::class, 'deleteProduct']);
 
