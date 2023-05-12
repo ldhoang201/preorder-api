@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('date_start')->nullable();
             $table->date('date_end')->nullable();
             $table->string('vendor')->nullable();
+            $table->integer('stock')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

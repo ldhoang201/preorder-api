@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function show()
+    public static function show()
     {
         return auth()->user();
     }
