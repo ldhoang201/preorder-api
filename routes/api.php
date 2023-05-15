@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\VariantController;
 use App\Models\Preorder;
 
 // use Osiset\ShopifyApp\Traits\WebhookController;
@@ -30,7 +31,10 @@ Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoByI
 
 Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
+    Route::get('bestseller', [ProductController::class, 'getBestSeller']);
+    Route::get('worstseller', [ProductController::class, 'getWorstSeller']);
     Route::get('/active/{product_id}', [ProductController::class, 'checkActive']);
+    Route::get('variants/{product_id}', [ProductController::class, 'getVariants']);
 
     Route::post('/', [ProductController::class, 'store']);
 
@@ -40,11 +44,13 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
         Route::get('/id/{product_id}', [ProductController::class, 'searchByProductId']);
         Route::get('/name/{name}', [ProductController::class, 'searchByname']);
     });
+    Route::get('test', [ProductController::class, 'test']);
 });
 
 
 Route::prefix('/preorders')->middleware('verify.shopify')->group(function () {
     Route::get('/', [PreorderController::class, 'index']);
+    Route::get('/{customerName}', [PreorderController::class, 'searchByCustomerName']);
 });
 
 Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');

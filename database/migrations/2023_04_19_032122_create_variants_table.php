@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('sold')->default(0);
             $table->integer('preorder')->default(0);
             $table->timestamps();
-            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

@@ -17,6 +17,11 @@ class ProductController extends Controller
         return $user->id;
     }
 
+    public function test()
+    {
+        return Product::getProductsFromShopify();
+    }
+
     // take data from Shoppify and store in database
     public function store()
     {
@@ -67,5 +72,18 @@ class ProductController extends Controller
     public function checkActive($product_id)
     {
         return Product::checkActive($this->getUserId(), $product_id);
+    }
+
+    public function getVariants($product_id)
+    {
+        return Product::getVariantsByProductId($this->getUserId(), $product_id);
+    }
+
+    public function getBestSeller() {
+        return Product::getMostSold($this->getUserId());
+    }
+
+    public function getWorstSeller() {
+        return Product::getLeastSold($this->getUserId());
     }
 }
