@@ -18,8 +18,7 @@ class Product extends Model
         'id',
         'date_start',
         'date_end',
-        'vendor',
-        'stock'
+        'vendor'
     ];
 
     public function variants()
@@ -54,12 +53,11 @@ class Product extends Model
         return Product::select('title', 'status', 'date_start', 'date_end', 'vendor', 'image_src', 'id')->where('user_id', $user_id)->get();
     }
 
-    public static function updateStatus($user_id, $product_id, $stock, $date_start, $date_end)
+    public static function updateStatus($user_id, $product_id, $date_start, $date_end)
     {
         Product::where('id', $product_id)
             ->where('user_id', $user_id)->update([
                 'status' => 1,
-                'stock' => $stock,
                 'date_start' => $date_start,
                 'date_end' => $date_end
             ]);
@@ -119,5 +117,17 @@ class Product extends Model
             ->take(3)
             ->get();
         return $products;
+    }
+
+    public static function activate($user_id, $request)
+    {
+        Product::where('id', $request->input('product_id'))
+            ->where('user_id', $user_id)->update([
+                'status' => 1,
+                'date_start' => $request->input('date_start'),
+                'date_end' => $request->input('date_end')
+            ]);
+        return Product::where('id', $request->input('product_id'))
+            ->where('user_id', $user_id)->get();
     }
 }

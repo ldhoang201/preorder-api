@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('option1')->nullable();
             $table->string('option2')->nullable();
             $table->string('sku')->nullable();
+            $table->integer('stock')->default(0);
             $table->integer('sold')->default(0);
             $table->integer('preorder')->default(0);
             $table->timestamps();

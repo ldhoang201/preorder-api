@@ -18,6 +18,7 @@ class Variant extends Model
         'option2',
         'title_var',
         'sku',
+        'stock',
         'sold',
         'preorder'
     ];
@@ -42,19 +43,12 @@ class Variant extends Model
         self::updateOrCreate(['id' => $variant['id']], $data);
     }
 
-    public static function getVariantsByProductId($user_id, $product_id)
+    public static function setStock($variants_stock)
     {
-        // return Variant::where('product_id', $product_id)
-        //     ->with(['products' => function ($querry) use ($user_id) {
-        //         $querry->where('user_id', '=', $user_id)->select('title');
-        //     }])->select('id', 'product_id', 'price', 'option1', 'option2', 'title_var', 'sku', 'sold', 'preorder')
-        //     ->get();
-        $test = Variant::with(
-            ['product' => function (Builder $query) {
-                $query->select('product_id', 'title');
-            }]
-        )->where('product_id', $product_id)->get();
-        return $test;
-        // ->where('product_id', $product_id)
+        foreach ($variants_stock as $variant) {
+            Variant::where('id', $variant['id'])->update([
+                'stock' => $variant['stock']
+            ]);
+        }
     }
 }

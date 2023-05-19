@@ -31,10 +31,12 @@ Route::get('/customerInfo/{id}', [CustomerController::class, 'getCustomerInfoByI
 
 Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
-    Route::get('bestseller', [ProductController::class, 'getBestSeller']);
-    Route::get('worstseller', [ProductController::class, 'getWorstSeller']);
+    Route::get('/bestseller', [ProductController::class, 'getBestSeller']);
+    Route::get('/worstseller', [ProductController::class, 'getWorstSeller']);
     Route::get('/active/{product_id}', [ProductController::class, 'checkActive']);
-    Route::get('variants/{product_id}', [ProductController::class, 'getVariants']);
+    Route::get('/variants/{product_id}', [ProductController::class, 'getVariants']);
+    Route::put('/activate', [ProductController::class, 'activate']);
+
 
     Route::post('/', [ProductController::class, 'store']);
 

@@ -79,11 +79,19 @@ class ProductController extends Controller
         return Product::getVariantsByProductId($this->getUserId(), $product_id);
     }
 
-    public function getBestSeller() {
+    public function getBestSeller()
+    {
         return Product::getMostSold($this->getUserId());
     }
 
-    public function getWorstSeller() {
+    public function getWorstSeller()
+    {
         return Product::getLeastSold($this->getUserId());
+    }
+
+    public function activate(Request $request)
+    {
+        Product::activate($this->getUserId(), $request);
+        return Variant::setStock($request->input('variants_stock'));
     }
 }
