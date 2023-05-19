@@ -37,6 +37,7 @@ Route::middleware('verify.shopify')->group(function () {
         Route::get('/variants/{product_id}', [ProductController::class, 'getVariants']);
 
         Route::put('/activate', [ProductController::class, 'activate']);
+        Route::put('/deactivate/{product_id}', [ProductController::class, 'deactivate']);
 
         Route::post('/', [ProductController::class, 'store']);
 

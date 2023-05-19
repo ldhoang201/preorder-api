@@ -131,4 +131,10 @@ class Product extends Model
         return Product::where('id', $request->input('product_id'))
             ->where('user_id', $user_id)->get();
     }
+
+    public static function deactivate($user_id, $product_id)
+    {
+        Product::where('user_id', $user_id)->where('id', $product_id)
+            ->update(['status' => 0]);
+    }
 }

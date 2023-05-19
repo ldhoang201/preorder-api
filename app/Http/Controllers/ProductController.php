@@ -94,4 +94,9 @@ class ProductController extends Controller
         Product::activate($this->getUserId(), $request);
         return Variant::setStock($request->input('variants_stock'));
     }
+
+    public function deactivate($product_id) {
+        Product::deactivate($this->getUserId(), $product_id);
+        return Variant::setStock($product_id, 1);
+    }
 }
