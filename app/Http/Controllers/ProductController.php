@@ -71,7 +71,7 @@ class ProductController extends Controller
 
     public function checkActive($product_id)
     {
-        return Product::checkActive($this->getUserId(), $product_id);
+        return Product::checkActive($product_id);
     }
 
     public function getVariants($product_id)

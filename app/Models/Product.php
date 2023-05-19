@@ -77,13 +77,14 @@ class Product extends Model
             ->where('user_id', $user_id)->get();
     }
 
-    public static function checkActive($user_id, $product_id)
+    public static function checkActive($product_id)
     {
 
         $variants = Product::with(['variants' => function ($query) {
             $query->select('product_id', 'stock');
-        }])->where('user_id', $user_id)->where('id', $product_id)
-        ->first();
+        }])->where('id', $product_id)
+            ->select('id', 'status', 'date_start', 'date_end')
+            ->first();
         return $variants;
     }
 
