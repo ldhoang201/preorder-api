@@ -13,7 +13,7 @@ class VariantController extends Controller
         return $user->id;
     }
 
-    public function index($product_id) {
-        return Variant::getVariantsByProductId($this->getUserId(), $product_id);
+    public function index() {
+        return Variant::getVariants($this->getUserId());
     }
 }

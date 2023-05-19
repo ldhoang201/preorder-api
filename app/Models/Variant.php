@@ -43,6 +43,12 @@ class Variant extends Model
         self::updateOrCreate(['id' => $variant['id']], $data);
     }
 
+    public static function getVariants($user_id) {
+        return Variant::with(['product' => function ($query) use ($user_id) {
+            $query->select('id')->where('user_id', $user_id);
+        }])->get();
+    }
+
     public static function setStock($variants_stock)
     {
         foreach ($variants_stock as $variant) {
