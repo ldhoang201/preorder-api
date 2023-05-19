@@ -79,12 +79,12 @@ class Product extends Model
 
     public static function checkActive($user_id, $product_id)
     {
-        $product = Product::where('id', $product_id)
-            ->where('user_id', $user_id)->first();
-        return response()->json([
-            'status' => $product->status,
-            'name' => $product->name,
-        ]);
+
+        $variants = Product::with(['variants' => function ($query) {
+            $query->select('product_id', 'stock');
+        }])->where('user_id', $user_id)->where('id', $product_id)
+        ->first();
+        return $variants;
     }
 
     public static function getVariantsByProductId($user_id, $product_id)

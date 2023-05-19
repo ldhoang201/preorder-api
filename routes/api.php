@@ -35,12 +35,12 @@ Route::prefix('/products')->middleware('verify.shopify')->group(function () {
     Route::get('/worstseller', [ProductController::class, 'getWorstSeller']);
     Route::get('/active/{product_id}', [ProductController::class, 'checkActive']);
     Route::get('/variants/{product_id}', [ProductController::class, 'getVariants']);
-    Route::put('/activate', [ProductController::class, 'activate']);
 
+    Route::put('/activate', [ProductController::class, 'activate']);
 
     Route::post('/', [ProductController::class, 'store']);
 
-    Route::put('/change/{product_id}/{status}/{stock?}/{date_start?}/{date_end?}', [ProductController::class, 'changeStatus']);
+    // Route::put('/change/{product_id}/{status}/{stock?}/{date_start?}/{date_end?}', [ProductController::class, 'changeStatus']);
 
     Route::prefix('/search')->group(function () {
         Route::get('/id/{product_id}', [ProductController::class, 'searchByProductId']);
