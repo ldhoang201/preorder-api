@@ -22,7 +22,7 @@ class Preorder extends Model
 
     public function customer(): HasOne
     {
-        return $this->hasOne(Customer::class, 'customer_id', 'customer_id');
+        return $this->hasOne(Customer::class);
     }
 
     public function variant(): HasOne
@@ -40,5 +40,9 @@ class Preorder extends Model
         return Preorder::whereHas('customer', function ($query) use ($customerName) {
             $query->where('name', 'ilike', '%' . $customerName . '%');
         })->where('user_id', $user_id)->with('customer', 'variant')->get();
+    }
+
+    public static function createPreorder($request){
+        
     }
 }

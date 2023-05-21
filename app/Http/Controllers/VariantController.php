@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Variant;
-use Illuminate\Http\Request;
 
 class VariantController extends Controller
 {

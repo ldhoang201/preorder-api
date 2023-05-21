@@ -55,11 +55,13 @@ Route::middleware('verify.shopify')->group(function () {
     Route::prefix('/preorders')->group(function () {
         Route::get('/', [PreorderController::class, 'index']);
         Route::get('/{customerName}', [PreorderController::class, 'searchByCustomerName']);
+
     });
 });
 
 Route::prefix('/sdk')->group(function () {
     Route::get('/active/{product_id}', [ProductController::class, 'checkActive']);
+    Route::post('/preorders', [PreorderController::class, 'store']);
 });
 
 

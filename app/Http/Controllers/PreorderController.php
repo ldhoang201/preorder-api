@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Preorder;
 
 use Illuminate\Http\Request;
@@ -24,5 +25,10 @@ class PreorderController extends Controller
     public function searchByCustomerName($customerName)
     {
         return PreOrder::getPreordersByCustomerName($this->getUserId(), $customerName);
+    }
+
+    public function store(Request $request) {
+        return 1;
+        // Preorder::createPreorder($request);
     }
 }

@@ -83,7 +83,7 @@ class Product extends Model
         $variants = Product::with(['variants' => function ($query) {
             $query->select('product_id', 'id', 'stock');
         }])->where('id', $product_id)
-            ->select('id', 'status', 'date_start', 'date_end')
+            ->select('id', 'status', 'date_start', 'date_end', 'user_id')
             ->first();
         return $variants;
     }

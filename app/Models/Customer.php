@@ -12,16 +12,25 @@ class Customer extends Model
 
     protected $fillable = [
         'id',
-        'customer_id',
         'name',
         'email',
         'phone',
-        'address',
-        'user_id'
+        'address'
     ];
 
     public function preorder(): BelongsTo
     {
         return $this->belongsTo(Preorder::class);
+    }
+
+    public static function createCustomer($request)
+    {
+        return $request->input('email');
+        // Customer::create([
+        //     'name' => $request->input('name'),
+        //     'email' => $request->input('email'),
+        //     'phone' => $request->input('phone'),
+        //     'address' => $request->input('address')
+        // ]);
     }
 }
