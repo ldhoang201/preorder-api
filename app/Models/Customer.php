@@ -25,12 +25,11 @@ class Customer extends Model
 
     public static function createCustomer($request)
     {
-        return $request->input('email');
-        // Customer::create([
-        //     'name' => $request->input('name'),
-        //     'email' => $request->input('email'),
-        //     'phone' => $request->input('phone'),
-        //     'address' => $request->input('address')
-        // ]);
+        return Customer::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address')
+        ]);
     }
 }

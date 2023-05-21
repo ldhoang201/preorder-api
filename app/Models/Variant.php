@@ -64,4 +64,15 @@ class Variant extends Model
             }
         }
     }
+
+
+    public static function getUserIdByVariant($variant_id)
+    {
+        $variant = Variant::where('id', $variant_id)->first();
+        return $variant->product->user_id;
+    }
+
+    public static function deductStock($variant_id, $quantity) {
+        Variant::where('id', $variant_id)->decrement('stock', $quantity);
+    }
 }

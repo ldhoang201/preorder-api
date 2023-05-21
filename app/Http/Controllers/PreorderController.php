@@ -28,7 +28,9 @@ class PreorderController extends Controller
     }
 
     public function store(Request $request) {
-        return 1;
-        // Preorder::createPreorder($request);
+
+        $customer = Customer::createCustomer($request);
+        // return $customer;
+        return Preorder::createPreorder($request, $customer->id);
     }
 }
