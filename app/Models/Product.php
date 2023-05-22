@@ -90,7 +90,6 @@ class Product extends Model
 
     public static function getVariantsByProductId($user_id, $product_id)
     {
-        // $product = Product::where('user_id', $user_id)->where('product_id', $product_id)->first();
         $variants = Product::with(['variants' => function ($query) {
             $query->select('*');
         }])->where('user_id', $user_id)->where('id', $product_id)->first();

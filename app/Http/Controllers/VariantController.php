@@ -12,6 +12,7 @@ class VariantController extends Controller
         return $user->id;
     }
 
+    // get all variants
     public function index() {
         return Variant::getVariants($this->getUserId());
     }

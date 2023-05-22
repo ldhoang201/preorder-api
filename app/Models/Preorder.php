@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Variant;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class Preorder extends Model
 {
@@ -22,7 +21,7 @@ class Preorder extends Model
 
     public function customer(): HasOne
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 
     public function variant(): HasOne
@@ -42,17 +41,14 @@ class Preorder extends Model
         })->where('user_id', $user_id)->with('customer', 'variant')->get();
     }
 
-    public static function createPreorder($request, $customer_id)
+    public static function createPreorder($variant_id, $quantity, $user_id, $customer_id)
     {
-        Variant::deductStock($request->input('selectedVariantId'), $request->input('quantity'));
-        $user_id =  Variant::getUserIdByVariant($request->input('selectedVariantId'));
-        // return $user_id;
         Preorder::create([
             'customer_id' => $customer_id,
             'user_id' => $user_id,
-            'variant_id' => $request->input('selectedVariantId'),
-            'quantity' => $request->input('quantity'),
-            'status' => 1
+            'variant_id' => $variant_id,
+            'quantity' => $quantity,
+            'status' => 0
         ]);
     }
 }

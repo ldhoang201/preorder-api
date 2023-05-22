@@ -56,6 +56,7 @@ Route::middleware('verify.shopify')->group(function () {
         Route::get('/', [PreorderController::class, 'index']);
         Route::get('/{customerName}', [PreorderController::class, 'searchByCustomerName']);
 
+        Route::put('/cancel/{preorder_id}', [PreorderController::class, 'cancel']);
     });
 });
 
@@ -67,6 +68,6 @@ Route::prefix('/sdk')->group(function () {
 
 
 
-Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
-Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');
-Route::delete('/removeWebhook/{webhookId}', [WebhookController::class, 'removeWebhook'])->middleware('verify.shopify');
+// Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
+// Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');
+// Route::delete('/removeWebhook/{webhookId}', [WebhookController::class, 'removeWebhook'])->middleware('verify.shopify');

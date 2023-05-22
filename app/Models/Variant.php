@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Controllers\UserController;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Variant extends Model
 {
@@ -65,14 +63,19 @@ class Variant extends Model
         }
     }
 
-
     public static function getUserIdByVariant($variant_id)
     {
         $variant = Variant::where('id', $variant_id)->first();
         return $variant->product->user_id;
     }
 
-    public static function deductStock($variant_id, $quantity) {
+    public static function deductStock($variant_id, $quantity)
+    {
         Variant::where('id', $variant_id)->decrement('stock', $quantity);
+    }
+
+    public static function addPreorder($variant_id, $quantity)
+    {
+        Variant::where('id', $variant_id)->increment('preorder', $quantity);
     }
 }
