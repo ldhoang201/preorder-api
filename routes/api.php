@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
-use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\VariantController;
 use App\Models\Preorder;
 
@@ -38,6 +37,7 @@ Route::middleware('verify.shopify')->group(function () {
 
         Route::put('/activate', [ProductController::class, 'activate']);
         Route::put('/deactivate/{product_id}', [ProductController::class, 'deactivate']);
+        Route::put('/fulfill/{product_id}', [ProductController::class, 'fulfill']);
 
         Route::post('/', [ProductController::class, 'store']);
 
@@ -45,7 +45,7 @@ Route::middleware('verify.shopify')->group(function () {
             Route::get('/id/{product_id}', [ProductController::class, 'searchByProductId']);
             Route::get('/name/{name}', [ProductController::class, 'searchByname']);
         });
-        Route::get('test', [ProductController::class, 'test']);
+        Route::get('/test', [ProductController::class, 'test']);
     });
 
     Route::prefix('/variants')->group(function () {
@@ -56,6 +56,7 @@ Route::middleware('verify.shopify')->group(function () {
         Route::get('/', [PreorderController::class, 'index']);
         Route::get('/{customerName}', [PreorderController::class, 'searchByCustomerName']);
 
+        Route::put('/fulfill', [PreorderController::class, 'fulfill']);
         Route::put('/cancel/{preorder_id}', [PreorderController::class, 'cancel']);
     });
 });

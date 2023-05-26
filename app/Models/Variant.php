@@ -26,6 +26,11 @@ class Variant extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
+    public function preorders()
+    {
+        return $this->belongsTo(Preorder::class, 'variant_id', 'id');
+    }
+
     public static function saveVariantInfo($variant)
     {
         $data = [
@@ -77,5 +82,30 @@ class Variant extends Model
     public static function addPreorder($variant_id, $quantity)
     {
         Variant::where('id', $variant_id)->increment('preorder', $quantity);
+    }
+
+
+    public static function extractId($variants)
+    {
+        $variantsId = [];
+        foreach ($variants as $variant) {
+            $variantsId[] = $variant['id'];
+        }
+        return $variantsId;
+    }
+
+    public static function fulfillVar($variantsId)
+    {
+        // return $variantsId;
+        foreach ($variantsId as $variantId) {
+            $variant = Variant::find($variantId);
+            if ($variant) {
+                $variant->sold += $variant->preorder;
+                $variant->preorder = 0;
+                $variant->save();
+            }
+        }
+
+
     }
 }

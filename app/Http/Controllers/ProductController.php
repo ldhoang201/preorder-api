@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Http\Controllers\UserController;
+use App\Models\Preorder;
 
 class ProductController extends Controller
 {
@@ -105,5 +106,14 @@ class ProductController extends Controller
     public function deactivate($product_id) {
         Product::deactivate($this->getUserId(), $product_id);
         return Variant::setStock($product_id, 1);
+    }
+
+    // fulfill product
+    public function fulfill($product_id) {
+        $product =  Product::getVariantsByProductId($this->getUserId(), $product_id);
+        $variantsId = Variant::extractId($product['variants']);
+
+        Variant::fulfillVar($variantsId);
+        Preorder::fulfillOrders($variantsId);
     }
 }
