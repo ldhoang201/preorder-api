@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Product extends Model
 {
@@ -124,8 +125,8 @@ class Product extends Model
         Product::where('id', $request->input('product_id'))
             ->where('user_id', $user_id)->update([
                 'status' => 1,
-                'date_start' => $request->input('date_start'),
-                'date_end' => $request->input('date_end')
+                'date_start' => Carbon::parse($request->input('date_start'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh'),
+                'date_end' => Carbon::parse($request->input('date_end'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh')
             ]);
         return Product::where('id', $request->input('product_id'))
             ->where('user_id', $user_id)->get();

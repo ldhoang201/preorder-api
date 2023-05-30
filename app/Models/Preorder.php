@@ -52,19 +52,23 @@ class Preorder extends Model
         ]);
     }
 
+    public static function fulfillOrdersByVar($variants_id)
+    {
+        foreach ($variants_id as $variant_id) {
+            Preorder::where('variant_id', $variant_id)->where('status', 0)->update(['status' => 1]);
+        }
+    }
+
     public static function fulfillOrders($preorders_id)
     {
         foreach ($preorders_id as $preorder_id) {
-            $preorder = Preorder::with('variant')->find($preorder_id);
+            $preorder = Preorder::with('variant')->where('status', 0)->find($preorder_id);
             if ($preorder) {
                 $quantity = $preorder->quantity;
                 $variant = $preorder->variant;
-
                 $newPreorder = max(0, $variant->preorder - $quantity);
                 $newSold = $variant->sold + $quantity;
-
                 $variant->update(['preorder' => $newPreorder, 'sold' => $newSold]);
-
                 $preorder->update(['status' => 1]);
             }
         }

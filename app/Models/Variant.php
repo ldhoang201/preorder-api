@@ -55,16 +55,15 @@ class Variant extends Model
 
     public static function setStock($variants_stock, $reset = 0)
     {
-        if ($reset == 1) {
-            Variant::with(['product' => function ($query) use ($variants_stock) {
-                $query->where('product_id', $variants_stock);
-            }])->update(['stock' => 0]);
-        } else {
-            foreach ($variants_stock as $variant) {
-                Variant::where('id', $variant['id'])->update([
-                    'stock' => $variant['stock']
-                ]);
-            }
+        // if ($reset == 1) {
+        //     Variant::with(['product' => function ($query) use ($variants_stock) {
+        //         $query->where('product_id', $variants_stock);
+        //     }])->update(['stock' => 0]);
+        // } else {
+        foreach ($variants_stock as $variant) {
+            Variant::where('id', $variant['id'])->update([
+                'stock' => $variant['stock']
+            ]);
         }
     }
 
@@ -87,25 +86,20 @@ class Variant extends Model
 
     public static function extractId($variants)
     {
-        $variantsId = [];
+        $variants_id = [];
         foreach ($variants as $variant) {
-            $variantsId[] = $variant['id'];
+            $variants_id[] = $variant['id'];
         }
-        return $variantsId;
+        return $variants_id;
     }
 
-    public static function fulfillVar($variantsId)
+    public static function fulfillVar($variants_id)
     {
-        // return $variantsId;
-        foreach ($variantsId as $variantId) {
-            $variant = Variant::find($variantId);
+        foreach ($variants_id as $variant_id) {
+            $variant = Variant::find($variant_id);
             if ($variant) {
-                $variant->sold += $variant->preorder;
-                $variant->preorder = 0;
-                $variant->save();
+                $variant->update(['sold' => $variant->sold + $variant->preorder, 'preorder' => 0]);
             }
         }
-
-
     }
 }
