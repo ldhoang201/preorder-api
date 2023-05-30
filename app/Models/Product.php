@@ -101,7 +101,7 @@ class Product extends Model
     public static function getMostSold($user_id)
     {
         $products = Product::join('variants', 'products.id', '=', 'variants.product_id')
-            ->select('products.*', DB::raw('SUM(variants.preorder) as total_preorder'))
+            ->select('products.*', DB::raw('SUM(variants.sold) as total_preorder'))
             ->where('user_id', $user_id)->where('status', 1)->groupBy('products.id')
             ->orderByDesc('total_preorder')
             ->take(3)
@@ -112,7 +112,7 @@ class Product extends Model
     public static function getLeastSold($user_id)
     {
         $products = Product::join('variants', 'products.id', '=', 'variants.product_id')
-            ->select('products.*', DB::raw('SUM(variants.preorder) as total_preorder'))
+            ->select('products.*', DB::raw('SUM(variants.sold) as total_preorder'))
             ->where('user_id', $user_id)->where('status', 1)->groupBy('products.id')
             ->orderBy('total_preorder')
             ->take(3)
