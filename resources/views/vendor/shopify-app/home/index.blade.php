@@ -15,7 +15,7 @@
              host: "{{ $host }}",
          };
      </script>
-     <script type="module" src="http://localhost:5904/src/main.ts">
+     <script type="module" src="http://localhost:5173/src/main.ts">
      </script>
 
  </body>
