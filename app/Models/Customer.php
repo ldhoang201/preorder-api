@@ -25,7 +25,7 @@ class Customer extends Model
 
     public static function createCustomer($request)
     {
-        return Customer::create([
+        return self::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),

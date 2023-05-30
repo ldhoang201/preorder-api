@@ -6,7 +6,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\VariantController;
-use App\Models\Preorder;
 
 // use Osiset\ShopifyApp\Traits\WebhookController;
 
@@ -33,20 +32,17 @@ Route::middleware('verify.shopify')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::get('/bestseller', [ProductController::class, 'getBestSeller']);
         Route::get('/worstseller', [ProductController::class, 'getWorstSeller']);
-        Route::get('/variants/{product_id}', [ProductController::class, 'getVariants']);
-
+        Route::get('/variants/{productId}', [ProductController::class, 'getVariants']);
         Route::put('/activate', [ProductController::class, 'activate']);
-        Route::put('/deactivate/{product_id}', [ProductController::class, 'deactivate']);
+        Route::put('/deactivate/{productId}', [ProductController::class, 'deactivate']);
         Route::put('/fulfill', [ProductController::class, 'fulfillMany']);
-        Route::put('/fulfill/{product_id}', [ProductController::class, 'fulfillOne']);
-
+        Route::put('/fulfill/{productId}', [ProductController::class, 'fulfillOne']);
         Route::post('/', [ProductController::class, 'store']);
 
         Route::prefix('/search')->group(function () {
-            Route::get('/id/{product_id}', [ProductController::class, 'searchByProductId']);
+            Route::get('/id/{productId}', [ProductController::class, 'searchByProductId']);
             Route::get('/name/{name}', [ProductController::class, 'searchByname']);
         });
-        Route::get('/test', [ProductController::class, 'test']);
     });
 
     Route::prefix('/variants')->group(function () {
@@ -56,19 +52,15 @@ Route::middleware('verify.shopify')->group(function () {
     Route::prefix('/preorders')->group(function () {
         Route::get('/', [PreorderController::class, 'index']);
         Route::get('/{customerName}', [PreorderController::class, 'searchByCustomerName']);
-
         Route::put('/fulfill', [PreorderController::class, 'fulfill']);
-        Route::put('/cancel/{preorder_id}', [PreorderController::class, 'cancel']);
+        // Route::put('/cancel/{preorder_id}', [PreorderController::class, 'cancel']);
     });
 });
 
 Route::prefix('/sdk')->group(function () {
-    Route::get('/active/{product_id}', [ProductController::class, 'checkActive']);
+    Route::get('/active/{productId}', [ProductController::class, 'checkActive']);
     Route::post('/preorders', [PreorderController::class, 'store']);
 });
-
-
-
 
 // Route::post('/regiswebhook', [WebhookController::class, 'createWebhook'])->middleware('verify.shopify');
 // Route::get('/listwebhooks', [WebhookController::class, 'getListWebhooks'])->middleware('verify.shopify');

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Preorder;
-use Illuminate\Http\Request;
 use App\Models\Variant;
+use Illuminate\Http\Request;
 
 class PreorderController extends Controller
 {
@@ -30,25 +30,22 @@ class PreorderController extends Controller
     // save preorders from sdk form
     public function store(Request $request)
     {
-
         $customer = Customer::createCustomer($request);
-        $variant_id = $request->input('selectedVariantId');
+        $variantId = $request->input('selectedVariantId');
         $quantity = $request->input('quantity');
-        $user_id =  Variant::getUserIdByVariant($variant_id);
+        $userId = Variant::getUserIdByVariant($variantId);
 
-        Variant::deductStock($variant_id, $quantity);
-        Variant::addPreorder($variant_id, $quantity);
-        return Preorder::createPreorder($variant_id, $quantity, $user_id, $customer->id);
+        Variant::deductStock($variantId, $quantity);
+        Variant::addPreorder($variantId, $quantity);
+
+        return Preorder::createPreorder($variantId, $quantity, $userId, $customer->id);
     }
 
-    // cancel preorder
-    public function cancel($preorder_id)
-    {
-    }
-
+    // fulfill preorders by preorder_id
     public function fulfill(Request $request)
     {
-        $preorders_id = $request->json()->all();
-        Preorder::fulfillOrders($preorders_id);
+        $preorderIds = $request->json()->all();
+        Preorder::fulfillPreorders($preorderIds);
+        return response()->json(['message' => 'Success'], 200);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Variant extends Model
 {
@@ -48,22 +49,19 @@ class Variant extends Model
 
     public static function getVariants($user_id)
     {
-        return Variant::with(['product' => function ($query) use ($user_id) {
-            $query->select('id')->where('user_id', $user_id);
-        }])->get();
+        return Variant::with('product:id,user_id')->whereHas('product', function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        })->get();
     }
 
     public static function setStock($variants_stock, $reset = 0)
     {
-        // if ($reset == 1) {
-        //     Variant::with(['product' => function ($query) use ($variants_stock) {
-        //         $query->where('product_id', $variants_stock);
-        //     }])->update(['stock' => 0]);
-        // } else {
-        foreach ($variants_stock as $variant) {
-            Variant::where('id', $variant['id'])->update([
-                'stock' => $variant['stock']
-            ]);
+        if ($reset == 1) {
+            Variant::whereIn('product_id', $variants_stock)->update(['stock' => 0]);
+        } else {
+            foreach ($variants_stock as $variant) {
+                Variant::where('id', $variant['id'])->update(['stock' => $variant['stock']]);
+            }
         }
     }
 
@@ -83,23 +81,17 @@ class Variant extends Model
         Variant::where('id', $variant_id)->increment('preorder', $quantity);
     }
 
-
     public static function extractId($variants)
     {
-        $variants_id = [];
-        foreach ($variants as $variant) {
-            $variants_id[] = $variant['id'];
-        }
-        return $variants_id;
+        return collect($variants)->pluck('id')->all();
     }
 
     public static function fulfillVar($variants_id)
-    {
-        foreach ($variants_id as $variant_id) {
-            $variant = Variant::find($variant_id);
-            if ($variant) {
-                $variant->update(['sold' => $variant->sold + $variant->preorder, 'preorder' => 0]);
-            }
-        }
-    }
+{
+    Variant::whereIn('id', $variants_id)
+        ->update([
+            'sold' => DB::raw('sold + preorder'),
+            'preorder' => 0
+        ]);
+}
 }

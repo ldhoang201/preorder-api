@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Variant;
-use App\Http\Controllers\UserController;
 use App\Models\Preorder;
 
 class ProductController extends Controller
@@ -15,11 +14,6 @@ class ProductController extends Controller
     {
         $user = UserController::show();
         return $user->id;
-    }
-
-    public function test()
-    {
-        return Product::getProductsFromShopify();
     }
 
     // take data from Shoppify and store in database
@@ -43,16 +37,11 @@ class ProductController extends Controller
         return Product::getAll($this->getUserId());
     }
 
-    // activate or deactivate a product by product_id
-    public function changeStatus($product_id, $stock, $date_start, $date_end)
-    {
-        return Product::updateStatus($this->getUserId(), $product_id, $stock, $date_start, $date_end);
-    }
-
     // search product by product_id
-    public function searchByProductId($product_id)
+    public function searchByProductId($productId)
     {
-        $product = Product::searchByProductId($this->getUserId(), $product_id);
+        $product = Product::searchByProductId($this->getUserId(), $productId);
+
         if ($product) {
             return $product;
         } else {
@@ -63,8 +52,9 @@ class ProductController extends Controller
     // search product by name
     public function searchByName($name)
     {
-        $product =  Product::searchByName($this->getUserId(), $name);
-        if (count($product) == 0) {
+        $product = Product::searchByName($this->getUserId(), $name);
+
+        if ($product->isEmpty()) {
             return response()->json(['message' => 'Product not found'], 404);
         } else {
             return $product;
@@ -72,15 +62,15 @@ class ProductController extends Controller
     }
 
     // get product's status, variants' stock, date start and end
-    public function checkActive($product_id)
+    public function checkActive($productId)
     {
-        return Product::checkActive($product_id);
+        return Product::checkActive($productId);
     }
 
     // get all variants by product_id
-    public function getVariants($product_id)
+    public function getVariants($productId)
     {
-        return Product::getVariantsByProductId($this->getUserId(), $product_id);
+        return Product::getVariantsByProductId($this->getUserId(), $productId);
     }
 
     // get best seller products
@@ -98,32 +88,34 @@ class ProductController extends Controller
     // activate products for preorder
     public function activate(Request $request)
     {
+        $variantsStock = $request->input('variants_stock');
         Product::activate($this->getUserId(), $request);
-        return Variant::setStock($request->input('variants_stock'));
+        return Variant::setStock($variantsStock);
     }
 
     // deactivate products
-    public function deactivate($product_id)
+    public function deactivate($productId)
     {
-        Product::deactivate($this->getUserId(), $product_id);
+        Product::deactivate($this->getUserId(), $productId);
         // return Variant::setStock($product_id, 1);
     }
 
-    // fulfill product
-    public function fulfillOne($product_id)
+    // fulfill one product
+    public function fulfillOne($productId)
     {
-        $product =  Product::getVariantsByProductId($this->getUserId(), $product_id);
-        $variants_id = Variant::extractId($product['variants']);
+        $product = Product::getVariantsByProductId($this->getUserId(), $productId);
+        $variantsId = Variant::extractId($product['variants']);
 
-        Variant::fulfillVar($variants_id);
-        Preorder::fulfillOrdersByVar($variants_id);
+        Variant::fulfillVar($variantsId);
+        Preorder::fulfillOrdersByVar($variantsId);
     }
 
+    // fulfill multi products
     public function fulfillMany(Request $request)
     {
-        $products_id = $request->json()->all();
-        foreach ($products_id as $product_id) {
-            $this->fulfillOne($product_id);
+        $productsId = $request->json()->all();
+        foreach ($productsId as $productId) {
+            $this->fulfillOne($productId);
         }
     }
 }

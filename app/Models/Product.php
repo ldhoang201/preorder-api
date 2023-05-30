@@ -10,8 +10,8 @@ use Carbon\Carbon;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = [
 
+    protected $fillable = [
         'user_id',
         'title',
         'status',
@@ -30,9 +30,8 @@ class Product extends Model
     public static function getProductsFromShopify()
     {
         $user = auth()->user();
-        $tempArr = $user->api()->rest('GET', '/admin/products.json');
-        $response = data_get($tempArr, 'body.products');
-        return $response;
+        $response = $user->api()->rest('GET', '/admin/products.json');
+        return data_get($response, 'body.products');
     }
 
     public static function saveProductInfo($product)
@@ -48,93 +47,94 @@ class Product extends Model
         self::updateOrCreate(['id' => $product['id']], $data);
     }
 
-
-    public static function getAll($user_id)
-    {
-        return Product::select('title', 'status', 'date_start', 'date_end', 'vendor', 'image_src', 'id')->where('user_id', $user_id)->get();
-    }
-
-    public static function updateStatus($user_id, $product_id, $date_start, $date_end)
-    {
-        Product::where('id', $product_id)
-            ->where('user_id', $user_id)->update([
-                'status' => 1,
-                'date_start' => $date_start,
-                'date_end' => $date_end
-            ]);
-    }
-
-    public static function searchByProductId($user_id, $product_id)
+    public static function getAll($userId)
     {
         return Product::select('title', 'status', 'date_start', 'date_end', 'vendor', 'image_src', 'id')
-            ->where('id', $product_id)
-            ->where('user_id', $user_id)->first();
+            ->where('user_id', $userId)
+            ->get();
     }
 
-    public static function searchByName($user_id, $name)
+    public static function searchByProductId($userId, $productId)
+    {
+        return Product::select('title', 'status', 'date_start', 'date_end', 'vendor', 'image_src', 'id')
+            ->where('id', $productId)
+            ->where('user_id', $userId)
+            ->first();
+    }
+
+    public static function searchByName($userId, $name)
     {
         return Product::select('title', 'status', 'date_start', 'date_end', 'vendor', 'image_src', 'id')
             ->where('title', 'ilike', '%' . $name . '%')
-            ->where('user_id', $user_id)->get();
+            ->where('user_id', $userId)
+            ->get();
     }
 
-    public static function checkActive($product_id)
+    public static function checkActive($productId)
     {
-
-        $variants = Product::with(['variants' => function ($query) {
+        return Product::with(['variants' => function ($query) {
             $query->select('product_id', 'id', 'stock', 'title_var');
-        }])->where('id', $product_id)
+        }])
+            ->where('id', $productId)
             ->select('id', 'status', 'date_start', 'date_end')
             ->first();
-        return $variants;
     }
 
-    public static function getVariantsByProductId($user_id, $product_id)
+    public static function getVariantsByProductId($userId, $productId)
     {
         $variants = Product::with(['variants' => function ($query) {
             $query->select('*');
-        }])->where('user_id', $user_id)->where('id', $product_id)->first();
-        $fields = ['title', 'variants'];
-        return collect($variants)->only($fields)->all();
+        }])
+            ->where('user_id', $userId)
+            ->where('id', $productId)
+            ->first();
+
+        return collect($variants)->only(['title', 'variants'])->all();
     }
 
-    public static function getMostSold($user_id)
+    public static function getMostSold($userId)
     {
-        $products = Product::join('variants', 'products.id', '=', 'variants.product_id')
-            ->select('products.*', DB::raw('SUM(variants.preorder) as total_preorder'))
-            ->where('user_id', $user_id)->where('status', 1)->groupBy('products.id')
-            ->orderByDesc('total_preorder')
+        return Product::withSum('variants', 'sold')
+            ->where('user_id', $userId)
+            ->where('status', 1)
+            ->orderByDesc('variants_sum_sold')
             ->take(3)
             ->get();
-        return $products;
     }
 
-    public static function getLeastSold($user_id)
+    public static function getLeastSold($userId)
     {
-        $products = Product::join('variants', 'products.id', '=', 'variants.product_id')
-            ->select('products.*', DB::raw('SUM(variants.preorder) as total_preorder'))
-            ->where('user_id', $user_id)->where('status', 1)->groupBy('products.id')
-            ->orderBy('total_preorder')
+        return Product::withSum('variants', 'sold')
+            ->where('user_id', $userId)
+            ->where('status', 1)
+            ->orderBy('variants_sum_sold')
             ->take(3)
             ->get();
-        return $products;
     }
 
-    public static function activate($user_id, $request)
+    public static function activate($userId, $request)
     {
-        Product::where('id', $request->input('product_id'))
-            ->where('user_id', $user_id)->update([
+        $productId = $request->input('product_id');
+        $dateStart = Carbon::parse($request->input('date_start'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh');
+        $dateEnd = Carbon::parse($request->input('date_end'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh');
+
+        Product::where('id', $productId)
+            ->where('user_id', $userId)
+            ->update([
                 'status' => 1,
-                'date_start' => Carbon::parse($request->input('date_start'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh'),
-                'date_end' => Carbon::parse($request->input('date_end'), 'UTC')->setTimezone('Asia/Ho_Chi_Minh')
+                'date_start' => $dateStart,
+                'date_end' => $dateEnd
             ]);
-        return Product::where('id', $request->input('product_id'))
-            ->where('user_id', $user_id)->get();
+
+        return Product::where('id', $productId)
+            ->where('user_id', $userId)
+            ->get();
     }
 
-    public static function deactivate($user_id, $product_id)
+    public static function deactivate($userId, $productId)
     {
-        Product::where('user_id', $user_id)->where('id', $product_id)
+        Product::where('user_id', $userId)
+            ->where('id', $productId)
             ->update(['status' => 0]);
     }
 }
