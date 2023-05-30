@@ -49,7 +49,6 @@ class PreorderController extends Controller
     public function fulfill(Request $request)
     {
         $preorders_id = $request->json()->all();
-        // return $data;
         Preorder::fulfillOrders($preorders_id);
     }
 }

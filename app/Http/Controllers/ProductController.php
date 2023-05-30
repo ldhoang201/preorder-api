@@ -103,13 +103,15 @@ class ProductController extends Controller
     }
 
     // deactivate products
-    public function deactivate($product_id) {
+    public function deactivate($product_id)
+    {
         Product::deactivate($this->getUserId(), $product_id);
         // return Variant::setStock($product_id, 1);
     }
 
     // fulfill product
-    public function fulfillOne($product_id) {
+    public function fulfillOne($product_id)
+    {
         $product =  Product::getVariantsByProductId($this->getUserId(), $product_id);
         $variants_id = Variant::extractId($product['variants']);
 
@@ -117,7 +119,11 @@ class ProductController extends Controller
         Preorder::fulfillOrdersByVar($variants_id);
     }
 
-    public function fulfillMany(Request $request) {
-        return $request;
+    public function fulfillMany(Request $request)
+    {
+        $products_id = $request->json()->all();
+        foreach ($products_id as $product_id) {
+            $this->fulfillOne($product_id);
+        }
     }
 }
