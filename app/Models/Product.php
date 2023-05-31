@@ -94,12 +94,19 @@ class Product extends Model
 
     public static function getMostSold($userId)
     {
-        return Product::withSum('variants', 'sold')
+        $query = Product::withSum('variants', 'sold')
             ->where('user_id', $userId)
             ->where('status', 1)
-            ->orderByDesc('variants_sum_sold')
-            ->take(3)
-            ->get();
+            ->whereHas('variants', function ($query) {
+                $query->where('sold', '>', 0);
+            })
+            ->orderByDesc('variants_sum_sold');
+
+        if ($query->count() >= 3) {
+            return $query->take(3)->get();
+        }
+
+        return $query->get();
     }
 
     public static function getLeastSold($userId)
